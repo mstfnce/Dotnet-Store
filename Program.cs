@@ -1,10 +1,13 @@
 using dotnet_store.Models;
+using dotnet_store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<IEmailService, SmtpEmailService>();
+builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddHttpContextAccessor();
 
 // Uygulama oluşturucu (builder) ve servis kaydı
 // MVC (Controller + Views) desteğini ekliyoruz

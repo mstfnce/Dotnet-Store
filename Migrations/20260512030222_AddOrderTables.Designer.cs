@@ -11,8 +11,8 @@ using dotnet_store.Models;
 namespace dotnet_store.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260501172135_UpdateIdentity")]
-    partial class UpdateIdentity
+    [Migration("20260512030222_AddOrderTables")]
+    partial class AddOrderTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -215,6 +215,45 @@ namespace dotnet_store.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("dotnet_store.Models.Cart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CartId");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("dotnet_store.Models.CartItem", b =>
+                {
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Miktar")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UrunId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("UrunId");
+
+                    b.ToTable("CartItem");
+                });
+
             modelBuilder.Entity("dotnet_store.Models.Kategori", b =>
                 {
                     b.Property<int>("Id")
@@ -294,6 +333,74 @@ namespace dotnet_store.Migrations
                             KategoriAdi = "Kategori 5",
                             Url = "kategori-5"
                         });
+                });
+
+            modelBuilder.Entity("dotnet_store.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AdresSatiri")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostaKodu")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Sehir")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SiparisTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefon")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("ToplamFiyat")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("dotnet_store.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Fiyat")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Miktar")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UrunId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UrunId");
+
+                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("dotnet_store.Models.Slider", b =>
@@ -528,6 +635,44 @@ namespace dotnet_store.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("dotnet_store.Models.CartItem", b =>
+                {
+                    b.HasOne("dotnet_store.Models.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotnet_store.Models.Urun", "Urun")
+                        .WithMany()
+                        .HasForeignKey("UrunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Urun");
+                });
+
+            modelBuilder.Entity("dotnet_store.Models.OrderItem", b =>
+                {
+                    b.HasOne("dotnet_store.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotnet_store.Models.Urun", "Urun")
+                        .WithMany()
+                        .HasForeignKey("UrunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Urun");
+                });
+
             modelBuilder.Entity("dotnet_store.Models.Urun", b =>
                 {
                     b.HasOne("dotnet_store.Models.Kategori", "Kategori")
@@ -539,9 +684,19 @@ namespace dotnet_store.Migrations
                     b.Navigation("Kategori");
                 });
 
+            modelBuilder.Entity("dotnet_store.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
             modelBuilder.Entity("dotnet_store.Models.Kategori", b =>
                 {
                     b.Navigation("Uruns");
+                });
+
+            modelBuilder.Entity("dotnet_store.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

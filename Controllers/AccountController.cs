@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_store.Models;
+using dotnet_store.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_store.Controllers;
 
@@ -14,14 +16,18 @@ public class AccountController : Controller
     private UserManager<AppUser> _userManager;
     private SignInManager<AppUser> _signInManager;
     private IEmailService _emailService;
+    private readonly DataContext _context;
+    private readonly ICartService _cartService;
 
     // Constructor: DI container buraya UserManager örneğini verir
     // Diğer action'larda kullanmak için özel alana atıyoruz
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService, DataContext context, ICartService cartService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailService = emailService;
+        _context = context;
+        _cartService = cartService;
     }
 
     // GET: /Account/Create
@@ -87,6 +93,10 @@ public class AccountController : Controller
                     await _userManager.ResetAccessFailedCountAsync(user);
                     await _userManager.SetLockoutEndDateAsync(user, null);
 
+                    await _cartService.TransferCartToUser(user.UserName!);
+
+
+
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -117,6 +127,7 @@ public class AccountController : Controller
 
         return View(model);
     }
+
 
     [Authorize]
     public async Task<ActionResult> LogOut()
@@ -225,6 +236,7 @@ public class AccountController : Controller
         return View();
     }
 
+
     public ActionResult ForgotPassword()
     {
         return View();
@@ -260,6 +272,8 @@ public class AccountController : Controller
 
         return View();
     }
+
+
 
     public async Task<ActionResult> ResetPassword(string userId, string token)
     {

@@ -10,7 +10,7 @@
         <title>E-Commerce</title>
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light d-flex flex-column min-vh-100">
 
         <header>
             @await Html.PartialAsync("Partials/Admin/_Message")
@@ -19,7 +19,7 @@
             @RenderSection("Bar", required: false)
         </header>
 
-        <main>
+        <main class="flex-fill">
             @RenderBody()
         </main>
 
