@@ -1,8 +1,10 @@
 using dotnet_store.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_store.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class KategoriController : Controller
 {
 
@@ -143,4 +145,5 @@ public class KategoriController : Controller
         }
         return RedirectToAction("Index");
     }
+
 }

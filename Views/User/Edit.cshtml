@@ -1,0 +1,109 @@
+@using Microsoft.AspNetCore.Http.Features
+@model UserEditModel
+
+@{
+    Layout = "_AdminLayout";
+    var roles = ViewBag.Roles as IEnumerable<string> ?? Enumerable.Empty<string>();
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card shadow">
+            <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Kullanici Guncelle</h5>
+                <a asp-action="Index" class="btn btn-sm btn-outline-primary" title="Listeye don">
+                    <i class="fa-solid fa-list"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <form method="post" asp-controller="User" asp-action="Edit">
+                    <div class="row mb-3">
+                        <label asp-for="AdSoyad" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <input asp-for="AdSoyad" class="form-control" />
+                            </div>
+                            <span asp-validation-for="AdSoyad" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </span>
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="border-top pt-3 mt-4">
+                        <div class="row mb-3">
+                            <div class="col-sm-10 offset-sm-2">
+                                <h6 class="mb-1">Parola Guncelle</h6>
+                                <div class="form-text">Parolayi degistirmek istemiyorsaniz bu alanlari bos birakin.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label asp-for="Password" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label asp-for="ConfirmPassword" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input asp-for="ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-top pt-3 mt-4">
+                        <div class="row mb-3">
+                            <div class="col-sm-10 offset-sm-2">
+                                <h6 class="mb-1">Roller</h6>
+                                <div class="form-text">Kullanicinin sahip olacagi rolleri secin.</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Rol</label>
+                            <div class="col-sm-10">
+                                @foreach (var item in roles)
+                                {
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="SelectedRoles" value="@item"
+                                               id="@item" @(Model.SelectedRoles!.Any(i => i == item) ? " checked" : "") />
+                                        <label class="form-check-label" for="@item">@item</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-sm-10 offset-sm-2 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk me-1"></i>
+                                Kaydet
+                            </button>
+                            <a asp-action="Index" class="btn btn-light">Iptal</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

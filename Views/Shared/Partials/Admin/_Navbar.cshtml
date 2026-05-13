@@ -1,6 +1,11 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
 <nav class="navbar bg-dark border-bottom border-body navbar-expand-lg" data-bs-theme="dark">
     <div class="container">
-        <a asp-controller="Kategori" asp-action="Index" class="navbar-brand">Admin</a>
+        <a asp-controller="Admin" asp-action="Index"
+           class="navbar-brand @(controller == "Admin" ? "active" : "")">Admin</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
             <span class="navbar-toggler-icon"></span>
@@ -8,34 +13,35 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a asp-controller="Kategori" asp-action="Index" class="nav-link">Kategori</a>
+                    <a asp-controller="Kategori" asp-action="Index"
+                       class="nav-link @(controller == "Kategori" ? "active" : "")">Kategori</a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Urun" asp-action="Index" class="nav-link">Ürün</a>
+                    <a asp-controller="Urun" asp-action="Index"
+                       class="nav-link @(controller == "Urun" ? "active" : "")">Ürün</a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Slider" asp-action="Index" class="nav-link">Slider</a>
+                    <a asp-controller="Slider" asp-action="Index"
+                       class="nav-link @(controller == "Slider" ? "active" : "")">Slider</a>
                 </li>
                 <li class="nav-item">
-                    <a href="role.html" class="nav-link">Role</a>
+                    <a asp-controller="Role" asp-action="Index"
+                       class="nav-link @(controller == "Role" ? "active" : "")">Role</a>
                 </li>
                 <li class="nav-item">
-                    <a href="kullanici.html" class="nav-link">Kullanıcı</a>
+                    <a asp-controller="User" asp-action="Index"
+                       class="nav-link @(controller == "User" ? "active" : "")">Kullanıcı</a>
                 </li>
                 <li class="nav-item">
                     <a href="siparis.html" class="nav-link">Sipariş</a>
                 </li>
             </ul>
             <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Mustafa Ince</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="hesabim.html" class="dropdown-item">Hesabım</a></li>
-                        <li><a href="#" class="dropdown-item">Çıkış</a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">@User.Identity?.Name</a>
                 </li>
                 <li class="nav-item">
-                    <a href="login.html" class="nav-link">Giriş</a>
+                    <a asp-controller="Account" asp-action="LogOut" class="nav-link">Cikis</a>
                 </li>
             </ul>
         </div>

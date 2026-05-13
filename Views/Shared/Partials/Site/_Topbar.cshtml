@@ -7,14 +7,39 @@
 
             <div class="col-lg-5 col-sm-8 col-8 order-lg-last">
                 <div class="text-end">
-                    <a href="#" class="btn btn-light">
-                        <i class="fa fa-user"></i> <span class="ms-1 d-none d-sm-inline-block">Hesabım</span>
-                    </a>
-                    <a href="#" class="btn btn-light">
-                        <i class="fa fa-heart"></i> <span class="ms-1 d-none d-sm-inline-block">Listem</span>
-                    </a>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="Index" class="btn btn-danger" target="_blank">
+                                <i class="fa-solid fa-lock"></i> <span class="ms-1 d-none d-sm-inline-block">Admin</span>
+                            </a>
+                        }
+                        <a asp-controller="Account" asp-action="EditUser" class="btn btn-light">
+                            <i class="fa-solid fa-circle-user"></i> <span
+                            class="ms-1 d-none d-sm-inline-block">Hesabım</span>
+                        </a>
+                        
+                        <a asp-controller="Account" asp-action="LogOut" class="btn btn-light">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span
+                            class="ms-1 d-none d-sm-inline-block">Cikis</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-light">
+                            <i class="fa-solid fa-right-to-bracket"></i> <span
+                            class="ms-1 d-none d-sm-inline-block">Giris</span>
+                        </a>
+                        <a asp-controller="Account" asp-action="Create" class="btn btn-light">
+                            <i class="fa-solid fa-user-plus"></i> <span class="ms-1 d-none d-sm-inline-block">Uye Ol</span>
+                        </a>
+                    }
+
                     <a href="shopping-cart.html" class="btn btn-light">
-                        <i class="fa fa-shopping-cart"></i> <span class="ms-1 d-none d-sm-inline-block">Sepetim</span>
+                        <i class="fa-solid fa-cart-shopping"></i> <span
+                        class="ms-1 d-none d-sm-inline-block">Sepetim</span>
                     </a>
                 </div>
             </div>
