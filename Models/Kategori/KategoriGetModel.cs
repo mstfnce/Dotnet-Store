@@ -1,11 +1,11 @@
 namespace dotnet_store.Models;
 
 
-//entity: veritabani tablosu
-public class Kategori
+// model: veri tasimak icin
+public class KategoriGetModel
 {
     public int Id { get; set; }
     public string KategoriAdi { get; set; } = null!;
     public string Url { get; set; } = null!;
-    public List<Urun> Uruns { get; set; } = new();
+    public int UrunSayisi { get; set; }
 }
