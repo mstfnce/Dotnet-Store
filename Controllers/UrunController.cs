@@ -50,6 +50,9 @@ public class UrunController : Controller
     [AllowAnonymous]
     public ActionResult List(string url, string q)
     {
+        ViewData["Kategoriler"] = _context.Kategoriler.ToList();
+        ViewData["SelectedCategory"] = url;
+
         // Sadece aktif urunleri getiren temel sorgu olusturulur.
         var query = _context.Urunler.Where(i => i.Aktif); //Queryable
 

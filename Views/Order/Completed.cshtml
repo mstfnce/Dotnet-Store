@@ -1,41 +1,32 @@
 @model string
-
-@section Bar {
-    <section class="bg-primary py-3">
-        <div class="container">
-            <nav>
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a asp-controller="Home" asp-action="Index">Anasayfa</a>
-                    </li>
-                    <li class="breadcrumb-item active">
-                        Sipariş Tamamlandı
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+@{
+    ViewData["Title"] = "Sipariş Tamamlandı";
 }
 
-<section class="py-4">
-    <div class="container">
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center py-5">
-                <i class="fa-solid fa-circle-check fa-3x text-success mb-3"></i>
-                <h1 class="h4 mb-2">Siparişiniz alındı</h1>
-                <p class="text-muted mb-4">
-                    Sipariş numaranız:
-                    <span class="fw-semibold text-dark">#@Model</span>
-                </p>
+@section Bar {
+    @await Component.InvokeAsync("Navbar")
+}
 
-                <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-                        Alışverişe Devam Et
-                    </a>
-                    <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">
-                        Sepete Git
-                    </a>
-                </div>
+<section class="completed-section">
+    <div class="container">
+        <div class="completed-card">
+            <div class="completed-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <span class="completed-kicker">SİPARİŞ TAMAMLANDI</span>
+            <h1>Siparişiniz alındı</h1>
+            <p>
+                Sipariş numaranız <strong>#@Model</strong>. Sipariş durumunu hesabınızdan takip edebilirsiniz.
+            </p>
+
+            <div class="completed-actions">
+                <a asp-controller="Urun" asp-action="List" class="checkout-btn">
+                    Alışverişe Devam Et <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a asp-controller="Order" asp-action="OrderList" class="continue-btn">
+                    Siparişlerim
+                </a>
             </div>
         </div>
     </div>

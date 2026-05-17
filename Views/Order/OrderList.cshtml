@@ -1,0 +1,67 @@
+@model List<Order>
+@{
+    ViewData["Title"] = "Siparişlerim";
+}
+
+@section Bar {
+    @await Component.InvokeAsync("Navbar")
+}
+
+<section class="account-section">
+    <div class="container">
+        <div class="account-layout">
+            @await Html.PartialAsync("Partials/Site/_AccountSideBar")
+
+            <div class="account-panel">
+                <div class="account-panel-header">
+                    <h1>Siparişlerim</h1>
+                    <p>Geçmiş siparişlerini ve ürün detaylarını buradan takip et.</p>
+                </div>
+
+                @if (Model.Count == 0)
+                {
+                    <div class="empty-catalog">
+                        <i class="fa-solid fa-box-open"></i>
+                        <h2>Henüz siparişiniz bulunmuyor.</h2>
+                        <p>Ürünleri inceleyip ilk siparişinizi oluşturabilirsiniz.</p>
+                        <a asp-controller="Urun" asp-action="List" class="hero-btn">Ürünlere Git</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="order-history-list">
+                        @foreach (var order in Model)
+                        {
+                            var araToplam = order.OrderItems.Sum(i => i.Fiyat * i.Miktar);
+                            <article class="order-history-card">
+                                <div class="order-history-head">
+                                    <div>
+                                        <strong>Sipariş #@order.Id</strong>
+                                        <span>@order.SiparisTarihi.ToString("d.MM.yyyy HH:mm")</span>
+                                    </div>
+                                    <strong>@order.ToplamFiyat.ToString("N0") ₺</strong>
+                                </div>
+
+                                <div class="order-history-items">
+                                    @foreach (var item in order.OrderItems)
+                                    {
+                                        <div>
+                                            <img src="~/img/@item.Urun.Resim" alt="@item.Urun.UrunAdi">
+                                            <span>@item.Urun.UrunAdi</span>
+                                            <small>@item.Miktar adet · @((item.Fiyat * item.Miktar).ToString("N0")) ₺</small>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="order-history-foot">
+                                    <span>Ara Toplam: @araToplam.ToString("N0") ₺</span>
+                                    <span>@order.AdresSatiri / @order.Sehir</span>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

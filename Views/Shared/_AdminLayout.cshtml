@@ -10,13 +10,13 @@
         <title>Admin</title>
     </head>
 
-    <body>
+    <body class="admin-body">
         <header>
             @await Html.PartialAsync("Partials/Admin/_Message")
             @await Html.PartialAsync("Partials/Admin/_Navbar")
         </header>
 
-        <main class="container my-3">
+        <main class="container admin-main">
             
             @RenderBody()
         </main>

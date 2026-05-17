@@ -1,41 +1,68 @@
-﻿@model List<Urun>
+@model List<Urun>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dotnet Store";
+    var categories = ViewData["Kategoriler"] as List<Kategori> ?? new List<Kategori>();
+    var categoryImages = new[] { "4.jpeg", "5.jpeg", "6.jpeg", "1.jpeg", "8.jpeg" };
+    var discounts = new[] { "-15%", "-10%", "", "-20%", "", "-15%" };
 }
 
 @section Bar {
     @await Component.InvokeAsync("Navbar")
 }
 
-<section class="mt-3">
+<section class="home-hero-section">
     <div class="container">
-        <div class="card">
-            <div class="row p-1 p-lg-2 gx-2">
-                <div class="col-lg-3 d-none d-lg-block">
-                    <!-- menu -->
-                    @await Html.PartialAsync("Partials/Site/_Menu", ViewData["Kategoriler"])
-                </div>
-                <div class="col-lg-9">
-                    <!-- slider -->
-                    @await Component.InvokeAsync("Slider")
-                </div>
-            </div>
+        <div class="home-slider-wrap">
+            @await Component.InvokeAsync("Slider")
         </div>
     </div>
 </section>
 
-
-<section class="mt-3">
+<section class="category-strip-section">
     <div class="container">
-        <h3 class="h4 mb-1 mb-lg-3">Son Eklenenler</h3>
-
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2">
-            @foreach (var urun in Model)
+        <div class="category-strip">
+            @for (var i = 0; i < Math.Min(categories.Count, 5); i++)
             {
-                <div class="col">
-                    @await Html.PartialAsync("Partials/Site/_UrunCard", urun)
-                </div>
+                var category = categories[i];
+                <a href="/urunler/@category.Url" class="category-tile">
+                    <img src="~/img/@categoryImages[i % categoryImages.Length]" alt="@category.KategoriAdi">
+                    <span>
+                        <strong>@category.KategoriAdi</strong>
+                        <small>İncele <i class="fa-solid fa-chevron-right"></i></small>
+                    </span>
+                </a>
             }
+        </div>
+    </div>
+</section>
+
+<section class="featured-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Öne Çıkan Ürünler</h2>
+            <a asp-controller="Urun" asp-action="List">Tümünü Gör <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+
+        <div class="featured-grid">
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                ViewData["Discount"] = discounts[i % discounts.Length];
+                @await Html.PartialAsync("Partials/Site/_UrunCard", Model[i], ViewData)
+            }
+        </div>
+    </div>
+</section>
+
+<section class="sale-banner-section">
+    <div class="container">
+        <div class="sale-banner">
+            <div class="sale-icon"><i class="fa-solid fa-tag"></i></div>
+            <div>
+                <h2>Yaz İndirimi Başladı!</h2>
+                <p>Seçili teknoloji ürünlerinde %30'a varan indirim. Sınırlı süreli fırsat.</p>
+            </div>
+            <div class="sale-code">Kod: <strong>SUMMER30</strong></div>
+            <a href="#" class="sale-link">Fırsatları Gör <i class="fa-solid fa-chevron-right"></i></a>
         </div>
     </div>
 </section>

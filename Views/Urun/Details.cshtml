@@ -5,127 +5,141 @@
 }
 
 @{
+    ViewData["Title"] = Model.UrunAdi;
     var benzerUrunler = ViewData["BenzerUrunler"] as List<Urun> ?? new List<Urun>();
+    var oldPrice = Model.Fiyat * 1.18;
+    var discounts = new[] { "-15%", "-10%", "", "-20%" };
 }
 
-<section class="py-4">
+<section class="product-detail-section">
     <div class="container">
-        <div class="row g-4 align-items-start">
-            <div class="col-lg-6">
-                <div class="gallery-wrap">
-                    <div class="img-big-wrap bg-white border rounded-2 d-flex align-items-center justify-content-center p-3">
-                        <a href="~/img/@Model.Resim" data-type="image" data-fslightbox class="d-flex align-items-center justify-content-center w-100 h-100">
-                            <img src="~/img/@Model.Resim" alt="@Model.UrunAdi" class="img-fluid object-fit-contain h-100">
-                        </a>
-                    </div>
+        <nav class="store-breadcrumb" aria-label="breadcrumb">
+            <a asp-controller="Home" asp-action="Index">Anasayfa</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <a asp-controller="Urun" asp-action="List">Ürünler</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>@Model.UrunAdi</span>
+        </nav>
 
-                    <div class="thumbs-wrap d-flex justify-content-center gap-2 mt-3">
-                        <a href="~/img/@Model.Resim" data-type="image" data-fslightbox class="bg-white">
-                            <img src="~/img/@Model.Resim" alt="@Model.UrunAdi">
-                        </a>
-                        <a href="~/img/1-big.jpeg" data-type="image" data-fslightbox class="bg-white">
-                            <img src="~/img/1.jpeg" alt="@Model.UrunAdi">
-                        </a>
-                        <a href="~/img/2-big.jpeg" data-type="image" data-fslightbox class="bg-white">
-                            <img src="~/img/2.jpeg" alt="@Model.UrunAdi">
-                        </a>
-                        <a href="~/img/3-big.jpeg" data-type="image" data-fslightbox class="bg-white">
-                            <img src="~/img/3.jpeg" alt="@Model.UrunAdi">
-                        </a>
-                    </div>
+        <div class="product-detail-card">
+            <div class="detail-gallery">
+                <a href="~/img/@Model.Resim" data-type="image" data-fslightbox class="detail-main-image">
+                    <span class="discount-badge">-15%</span>
+                    <img src="~/img/@Model.Resim" alt="@Model.UrunAdi">
+                </a>
+
+                <div class="detail-thumbs">
+                    <a href="~/img/@Model.Resim" data-type="image" data-fslightbox>
+                        <img src="~/img/@Model.Resim" alt="@Model.UrunAdi">
+                    </a>
+                    <a href="~/img/1-big.jpeg" data-type="image" data-fslightbox>
+                        <img src="~/img/1.jpeg" alt="@Model.UrunAdi">
+                    </a>
+                    <a href="~/img/2-big.jpeg" data-type="image" data-fslightbox>
+                        <img src="~/img/2.jpeg" alt="@Model.UrunAdi">
+                    </a>
+                    <a href="~/img/3-big.jpeg" data-type="image" data-fslightbox>
+                        <img src="~/img/3.jpeg" alt="@Model.UrunAdi">
+                    </a>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <article class="ps-lg-3">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge text-bg-success">Stokta</span>
-                        <span class="text-muted small">Ürün kodu: @Model.Id</span>
+            <article class="detail-info">
+                <div class="detail-meta">
+                    <span class="stock-badge"><i class="fa-solid fa-check"></i> Stokta</span>
+                    <span>Ürün Kodu: @Model.Id</span>
+                </div>
+
+                <h1>@Model.UrunAdi</h1>
+
+                <div class="detail-rating">
+                    <span class="stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                    </span>
+                    <span>4.5 puan</span>
+                    <span class="dot-divider"></span>
+                    <span>128 değerlendirme</span>
+                </div>
+
+                <div class="detail-price-box">
+                    <div class="detail-price">
+                        <strong>@Model.Fiyat.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                        <del>@oldPrice.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</del>
                     </div>
+                    <p>KDV dahil. Uygun siparişlerde kargo ücretsiz.</p>
+                </div>
 
-                    <h1 class="h2 fw-bold mb-2">@Model.UrunAdi</h1>
+                <p class="detail-description">
+                    @(string.IsNullOrWhiteSpace(Model.Aciklama) ? "Dotnet Store müşterileri için seçilmiş kaliteli teknoloji ürünü." : Model.Aciklama)
+                </p>
 
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <div class="rating-wrap text-warning">
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa-regular fa-star text-secondary"></span>
-                        </div>
-                        <span class="small text-muted">4.0 değerlendirme</span>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="detail-actions">
+                    <input type="hidden" name="urunId" value="@Model.Id" />
+                    <label class="quantity-control">
+                        <span>Adet</span>
+                        <input type="number" name="miktar" value="1" min="1">
+                    </label>
+                    <button type="submit" class="detail-cart-btn">
+                        <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                    </button>
+                    <a href="#" class="detail-favorite-btn" aria-label="Add to favorites">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                </form>
+
+                <div class="detail-benefits">
+                    <div>
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>
+                            <strong>Hızlı Teslimat</strong>
+                            <small>Mağazadan hızlı gönderim</small>
+                        </span>
                     </div>
-
-                    <div class="border-top border-bottom py-3 mb-4">
-                        <div class="fs-2 fw-bold text-dark">@Model.Fiyat ₺</div>
-                        <div class="small text-muted mt-1">KDV dahil, kargo ücretsiz.</div>
+                    <div>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>
+                            <strong>Güvenli Ödeme</strong>
+                            <small>Korumalı ödeme süreci</small>
+                        </span>
                     </div>
-
-                    <p class="lead fs-6 text-secondary mb-4">@Model.Aciklama</p>
-
-                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-flex flex-column flex-sm-row gap-2 align-items-stretch align-items-sm-center mb-3">
-                        <input type="hidden" name="urunId" value="@Model.Id" />
-                        <div class="input-group" style="max-width: 150px;">
-                            <span class="input-group-text">Adet</span>
-                            <input type="number" name="miktar" value="1" min="1" class="form-control text-center">
-                        </div>
-                        <button type="submit" class="btn btn-warning btn-lg px-4">
-                            <i class="fa fa-shopping-basket me-2"></i>Sepete Ekle
-                        </button>
-                        <a href="#" class="btn btn-light btn-lg px-4">
-                            <i class="fa-regular fa-heart me-2"></i>Listeye Ekle
-                        </a>
-                    </form>
-
-                    <div class="row g-2 text-muted small">
-                        <div class="col-sm-6">
-                            <div class="bg-white border rounded-2 p-3 h-100">
-                                <i class="fa-solid fa-truck-fast text-primary me-2"></i>Hızlı teslimat
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="bg-white border rounded-2 p-3 h-100">
-                                <i class="fa-solid fa-shield-halved text-primary me-2"></i>Güvenli ödeme
-                            </div>
-                        </div>
+                    <div>
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>
+                            <strong>Kolay İade</strong>
+                            <small>Basit iade süreci</small>
+                        </span>
                     </div>
-                </article>
-            </div>
+                    <div>
+                        <i class="fa-solid fa-headset"></i>
+                        <span>
+                            <strong>Destek</strong>
+                            <small>İhtiyacınız olduğunda yardım</small>
+                        </span>
+                    </div>
+                </div>
+            </article>
         </div>
     </div>
 </section>
 
 @if (benzerUrunler.Count > 0)
 {
-    <section class="pb-5">
+    <section class="related-products-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Benzer Ürünler</h2>
+            <div class="section-heading">
+                <h2>Benzer Ürünler</h2>
+                <a asp-controller="Urun" asp-action="List">Tümünü Gör <i class="fa-solid fa-chevron-right"></i></a>
             </div>
 
-            <div class="row g-3">
-                @foreach (var item in benzerUrunler)
+            <div class="related-grid">
+                @for (var i = 0; i < benzerUrunler.Count; i++)
                 {
-                    <div class="col-6 col-lg-3">
-                        <div class="card h-100 shadow-sm border-0">
-                            <a asp-controller="Urun" asp-action="Details" asp-route-id="@item.Id" class="img-wrap text-decoration-none bg-white">
-                                <img src="~/img/@item.Resim" alt="@item.UrunAdi" class="card-img-top">
-                            </a>
-
-                            <div class="card-body border-top">
-                                <a asp-controller="Urun" asp-action="Details" asp-route-id="@item.Id" class="d-block text-decoration-none text-dark fw-semibold text-truncate mb-2">
-                                    @item.UrunAdi
-                                </a>
-                                <div class="fw-bold mb-3">@item.Fiyat ₺</div>
-                                <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                                    <input type="hidden" name="urunId" value="@item.Id" />
-                                    <button type="submit" class="btn btn-light w-100">
-                                        <i class="fa fa-shopping-basket me-1"></i>Sepete Ekle
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    ViewData["Discount"] = discounts[i % discounts.Length];
+                    @await Html.PartialAsync("Partials/Site/_UrunCard", benzerUrunler[i], ViewData)
                 }
             </div>
         </div>

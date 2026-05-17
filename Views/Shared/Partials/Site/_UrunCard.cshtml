@@ -1,21 +1,36 @@
 @model Urun
+@{
+    var discount = ViewData["Discount"] as string;
+    var oldPrice = Model.Fiyat * 1.18;
+}
 
-<div class="card shadow">
-    <div class="img-wrap">
-        <span class="badge bg-success">İndirim</span>
-        <img src="~/img/@Model.Resim" alt="@Model.UrunAdi" class="card-img-top">
+<article class="product-card">
+    @if (!string.IsNullOrWhiteSpace(discount))
+    {
+        <span class="discount-badge">@discount</span>
+    }
+    <a asp-controller="Urun" asp-action="Details" asp-route-id="@Model.Id" class="product-image">
+        <img src="~/img/@Model.Resim" alt="@Model.UrunAdi">
+    </a>
+    <div class="product-info">
+        <a asp-controller="Urun" asp-action="Details" asp-route-id="@Model.Id" class="product-title">@Model.UrunAdi</a>
+        <span class="product-category">Teknoloji Ürünü</span>
+        <div class="rating-row">
+            <span class="stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+            </span>
+            <span>(128)</span>
         </div>
-
-        <div class="border-top info-wrap">
-            <a href="#" class="float-end btn btn-light">
-                <i class="fa-regular fa-heart"></i>
-            </a>
-            <a asp-controller="Urun" asp-action="Details" asp-route-id="@Model.Id"
-                   class="title text-truncate">@Model.UrunAdi
-            </a>
-            <div class="price-wrap">
-                <span class="price-discount">@Model.Fiyat ₺</span>
-                @* <del class="price">49.999 ₺</del> *@
-            </div>
+        <div class="price-wrap">
+            <strong>@Model.Fiyat.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+            <del>@oldPrice.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</del>
         </div>
+        <a asp-controller="Cart" asp-action="Index" class="add-cart-btn">
+            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+        </a>
     </div>
+</article>

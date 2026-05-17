@@ -1,128 +1,116 @@
 @model Cart
-
-@section Bar {
-    <section class="bg-primary py-3">
-        <div class="container">
-            <nav>
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a asp-controller="Home" asp-action="Index">Anasayfa</a>
-                    </li>
-                    
-                    <li class="breadcrumb-item active">
-                        Alisveris Sepeti
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+@{
+    ViewData["Title"] = "Sepet";
+    var subtotal = Model.AraToplam();
+    var tax = subtotal * 0.2;
+    var total = Model.Toplam();
 }
 
+@section Bar {
+    @await Component.InvokeAsync("Navbar")
+}
 
-<section class="py-4">
+<section class="cart-section">
     <div class="container">
         @if (Model.CartItems.Count == 0)
         {
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center py-5">
-                    <i class="fa-solid fa-cart-shopping fa-2x text-warning mb-3"></i>
-                    <h1 class="h5 mb-2">Sepetinizde ürün bulunmuyor.</h1>
-                    <p class="text-muted mb-4">Ürünleri inceleyip sepetinize ekleyebilirsiniz.</p>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-                        Alışverişe Başla
-                    </a>
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
                 </div>
+                <h2>Sepetinizde ürün bulunmuyor.</h2>
+                <p>Ürünleri inceleyip sepetinize ekleyebilirsiniz.</p>
+                <a asp-controller="Urun" asp-action="List" class="hero-btn">
+                    Alışverişe Başla <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
         }
         else
         {
-            <div class="row g-4">
-                <div class="col-lg-8">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-white py-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h1 class="h5 mb-0">Alışveriş Sepeti</h1>
-                                <span class="badge text-bg-primary">@Model.CartItems.Count ürün</span>
-                            </div>
+            <div class="cart-layout">
+                <div class="cart-items-panel">
+                    <div class="cart-panel-header">
+                        <div>
+                            <h2>Sepet Ürünleri</h2>
+                            <span>@Model.CartItems.Count ürün sepetinizde</span>
                         </div>
-                        <div class="list-group list-group-flush">
-                            @foreach (var item in Model.CartItems)
-                            {
-                                <div class="list-group-item p-3">
-                                    <div class="row g-3 align-items-center">
-                                        <div class="col-md-6">
-                                            <div class="d-flex align-items-center">
-                                                <img src="~/img/@item.Urun.Resim"
-                                                     class="rounded border bg-light object-fit-contain"
-                                                     style="width: 88px; height: 88px;" alt="@item.Urun.UrunAdi" />
-                                                <div class="ms-3">
-                                                    <a class="text-decoration-none text-dark" asp-controller="Urun"
-                                                           asp-action="Details" asp-route-id="@item.UrunId">
-                                                        <h2 class="h6 mb-1">@item.Urun.UrunAdi</h2>
-                                                    </a>
-                                                    <div class="small text-muted">Birim fiyat: @item.Urun.Fiyat ₺</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-5 col-md-2">
-                                            <label class="form-label small text-muted mb-1">Adet</label>
-                                            <input type="number" value="@item.Miktar" class="form-control form-control-sm"
-                                                   min="1" />
-                                        </div>
-                                        <div class="col-5 col-md-3 text-md-end">
-                                            <div class="small text-muted">Toplam</div>
-                                            <div class="fw-bold">@((item.Urun.Fiyat * item.Miktar)) ₺</div>
-                                        </div>
-                                        <div class="col-2 col-md-1 text-end">
-                                            <form asp-controller="Cart" asp-action="RemoveItem" method="post">
-                                                <input type="hidden" name="urunId" value="@item.UrunId" />
-                                                <input type="hidden" name="miktar" value="@item.Miktar" />
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        title="Sepetten kaldır">
-                                                    <i class="fa-solid fa-trash-can"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                        <a asp-controller="Urun" asp-action="List">Alışverişe Devam Et</a>
+                    </div>
+
+                    <div class="cart-items-list">
+                        @foreach (var item in Model.CartItems)
+                        {
+                            var lineTotal = item.Urun.Fiyat * item.Miktar;
+                            <article class="cart-item-row">
+                                <a asp-controller="Urun" asp-action="Details" asp-route-id="@item.UrunId" class="cart-item-image">
+                                    <img src="~/img/@item.Urun.Resim" alt="@item.Urun.UrunAdi">
+                                </a>
+
+                                <div class="cart-item-info">
+                                    <a asp-controller="Urun" asp-action="Details" asp-route-id="@item.UrunId">
+                                        @item.Urun.UrunAdi
+                                    </a>
+                                    <span>Birim Fiyat: @item.Urun.Fiyat.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</span>
+                                    <div class="cart-item-mobile-total">
+                                        @lineTotal.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))
                                     </div>
                                 </div>
-                            }
-                        </div>
+
+                                <div class="cart-quantity">
+                                    <span>Adet</span>
+                                    <strong>@item.Miktar</strong>
+                                </div>
+
+                                <div class="cart-line-total">
+                                    <span>Toplam</span>
+                                    <strong>@lineTotal.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                                </div>
+
+                                <form asp-controller="Cart" asp-action="RemoveItem" method="post" class="cart-remove-form">
+                                    <input type="hidden" name="urunId" value="@item.UrunId" />
+                                    <input type="hidden" name="miktar" value="@item.Miktar" />
+                                    <button type="submit" title="Sepetten kaldır">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            </article>
+                        }
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card shadow-sm border-0 sticky-top" style="top: 1rem;">
-                        <div class="card-body p-4">
-                            <h2 class="h5 mb-3">Sipariş Özeti</h2>
-                            <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Sipariş Toplamı</span>
-                                <span class="fw-semibold">@Model.AraToplam() ₺</span>
-                            </div>
-                            <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Kargo Ücreti</span>
-                                <span class="text-success fw-semibold">Ücretsiz</span>
-                            </div>
-                            <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Vergi (%20)</span>
-                                <span class="fw-semibold">@(Model.AraToplam() * 0.2) ₺</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center py-3">
-                                <span class="fw-bold">Toplam</span>
-                                <span class="fs-5 fw-bold text-primary">@Model.Toplam() ₺</span>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <a asp-controller="Order" asp-action="Checkout" class="btn btn-primary btn-lg">
-                                    Siparişi Tamamla
-                                </a>
-                                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
-                                    Alışverişe Devam Et
-                                </a>
-                            </div>
-                            <div class="small text-muted mt-3">
-                                Ürün fiyatları ve toplam tutar sepetinizdeki adetlere göre hesaplanır.
-                            </div>
-                        </div>
+
+                <aside class="cart-summary-card">
+                    <h2>Sipariş Özeti</h2>
+
+                    <div class="summary-row">
+                        <span>Ara Toplam</span>
+                        <strong>@subtotal.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
                     </div>
-                </div>
+                    <div class="summary-row">
+                        <span>Kargo</span>
+                        <strong class="success-text">Ücretsiz</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Vergi (%20)</span>
+                        <strong>@tax.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Toplam</span>
+                        <strong>@total.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                    </div>
+
+                    <a asp-controller="Order" asp-action="Checkout" class="checkout-btn">
+                        Ödemeye Geç <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a asp-controller="Urun" asp-action="List" class="continue-btn">
+                        Alışverişe Devam Et
+                    </a>
+
+                    <div class="summary-note">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Güvenli ödeme ve şifreli checkout.</span>
+                    </div>
+                </aside>
             </div>
         }
     </div>

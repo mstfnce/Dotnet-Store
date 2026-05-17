@@ -15,6 +15,15 @@ public class Order
 
     public List<OrderItem> OrderItems { get; set; } = new();
 
+    public double AraToplam()
+    {
+        return OrderItems.Sum(i => i.Fiyat * i.Miktar);
+    }
+
+    public double Toplam()
+    {
+        return OrderItems.Sum(i => i.Fiyat * i.Miktar) * 1.2;
+    }
 }
 
 public class OrderItem

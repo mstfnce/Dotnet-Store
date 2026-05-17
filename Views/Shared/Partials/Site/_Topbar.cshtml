@@ -1,56 +1,61 @@
 <section class="top-bar">
     <div class="container">
-        <div class="row gy-2 align-items-center">
-            <div class="col-lg-2 col-sm-4 col-4">
-                <a href="/" class="navbar-brand"><i class="fa-solid fa-truck-fast"></i> E-Commerce</a>
-            </div>
+        <div class="top-bar-grid">
+            <a href="/" class="store-brand">
+                <span class="brand-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span><strong>Dotnet</strong> Store</span>
+            </a>
 
-            <div class="col-lg-5 col-sm-8 col-8 order-lg-last">
-                <div class="text-end">
+            <form asp-controller="Urun" asp-action="List" method="get" class="search-form">
+                <input name="q" type="text" placeholder="Ürün, kategori veya marka ara..." value="@ViewData["q"]">
+                <button type="submit" aria-label="Ara"><i class="fa fa-search"></i></button>
+            </form>
 
-                    @if (User.Identity?.IsAuthenticated == true)
+            <div class="top-actions">
+                <button type="button" class="top-action theme-toggle" id="themeToggle" aria-label="Toggle dark theme">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Tema</span>
+                </button>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    @if (User.IsInRole("Admin"))
                     {
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-controller="Admin" asp-action="Index" class="btn btn-danger" target="_blank">
-                                <i class="fa-solid fa-lock"></i> <span class="ms-1 d-none d-sm-inline-block">Admin</span>
-                            </a>
-                        }
-                        <a asp-controller="Account" asp-action="EditUser" class="btn btn-light">
-                            <i class="fa-solid fa-circle-user"></i> <span
-                            class="ms-1 d-none d-sm-inline-block">Hesabım</span>
-                        </a>
-                        
-                        <a asp-controller="Account" asp-action="LogOut" class="btn btn-light">
-                            <i class="fa-solid fa-right-from-bracket"></i> <span
-                            class="ms-1 d-none d-sm-inline-block">Cikis</span>
+                        <a asp-controller="Admin" asp-action="Index" class="top-action admin-action" target="_blank">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Admin</span>
                         </a>
                     }
-                    else
-                    {
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-light">
-                            <i class="fa-solid fa-right-to-bracket"></i> <span
-                            class="ms-1 d-none d-sm-inline-block">Giris</span>
-                        </a>
-                        <a asp-controller="Account" asp-action="Create" class="btn btn-light">
-                            <i class="fa-solid fa-user-plus"></i> <span class="ms-1 d-none d-sm-inline-block">Uye Ol</span>
-                        </a>
-                    }
-
-                    <a asp-controller="Cart" asp-action="Index" class="btn btn-light">
-                        <i class="fa-solid fa-cart-shopping"></i> <span
-                        class="ms-1 d-none d-sm-inline-block">Sepetim</span>
+                    <a asp-controller="Account" asp-action="EditUser" class="top-action">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Hesabım</span>
                     </a>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <form asp-controller="Urun" asp-action="List" method="get">
-                    <div class="input-group">
-                        <input name="q" type="text" placeholder="Anahtar kelime" class="form-control"
-                               value="@ViewData["q"] ">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                    </div>
-                </form>
+                    <a asp-controller="Account" asp-action="LogOut" class="top-action">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Çıkış</span>
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="top-action">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Giriş</span>
+                    </a>
+                    <a asp-controller="Account" asp-action="Create" class="top-action">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>Üye Ol</span>
+                    </a>
+                }
+
+                <a href="#" class="top-action">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Favoriler</span>
+                </a>
+                <a asp-controller="Cart" asp-action="Index" class="top-action cart-action">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span>Sepet</span>
+                </a>
             </div>
         </div>
     </div>

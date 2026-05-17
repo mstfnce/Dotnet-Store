@@ -34,4 +34,10 @@ public class OrderCreateModel
     [StringLength(500, ErrorMessage = "{0} en fazla {1} karakter olabilir.")]
     [Display(Name = "Sipariş Notu")]
     public string? SiparisNotu { get; set; }
+
+    public string CartName { get; set; } = null!;
+    public string CartNumber { get; set; } = null!;
+    public string CartExpirationYear { get; set; } = null!;
+    public string CartExpirationMonth { get; set; } = null!;
+    public string CartCVV { get; set; } = null!;
 }

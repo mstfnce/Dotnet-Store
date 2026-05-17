@@ -1,167 +1,169 @@
 @model OrderCreateModel
-
-@section Bar {
-    <section class="bg-primary py-3">
-        <div class="container">
-            <nav>
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a asp-controller="Home" asp-action="Index">Anasayfa</a>
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        Siparişi Tamamla
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+@{
+    ViewData["Title"] = "Ödeme";
+    Cart cart = ViewBag.Cart;
+    var subtotal = cart.AraToplam();
+    var tax = subtotal * 0.2;
+    var total = cart.Toplam();
 }
 
-<section class="py-4">
+@section Bar {
+    @await Component.InvokeAsync("Navbar")
+}
+
+<section class="checkout-section">
     <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-8">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-white py-3">
-                        <div class="d-flex align-items-center justify-content-between gap-3">
+        <nav class="store-breadcrumb" aria-label="breadcrumb">
+            <a asp-controller="Home" asp-action="Index">Anasayfa</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <a asp-controller="Cart" asp-action="Index">Sepet</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Ödeme</span>
+        </nav>
+
+        <form method="post" class="checkout-layout">
+            <div class="checkout-main">
+                <div asp-validation-summary="All" class="checkout-validation"></div>
+
+                <section class="checkout-card">
+                    <div class="checkout-card-header">
+                        <span>1</span>
+                        <div>
+                            <h1>Teslimat Bilgileri</h1>
+                            <p>Siparişin gönderileceği adres bilgilerini girin.</p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-form-grid">
+                        <div class="form-field full">
+                            <label asp-for="AdSoyad"></label>
+                            <input asp-for="AdSoyad" autocomplete="name" />
+                            <span asp-validation-for="AdSoyad"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="Sehir"></label>
+                            <input asp-for="Sehir" autocomplete="address-level2" />
+                            <span asp-validation-for="Sehir"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="Telefon"></label>
+                            <input asp-for="Telefon" autocomplete="tel" />
+                            <span asp-validation-for="Telefon"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="PostaKodu"></label>
+                            <input asp-for="PostaKodu" autocomplete="postal-code" />
+                            <span asp-validation-for="PostaKodu"></span>
+                        </div>
+                        <div class="form-field full">
+                            <label asp-for="AdresSatiri"></label>
+                            <textarea asp-for="AdresSatiri" rows="3" autocomplete="street-address"></textarea>
+                            <span asp-validation-for="AdresSatiri"></span>
+                        </div>
+                        <div class="form-field full">
+                            <label asp-for="SiparisNotu"></label>
+                            <textarea asp-for="SiparisNotu" rows="3"></textarea>
+                            <span asp-validation-for="SiparisNotu"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="checkout-card">
+                    <div class="checkout-card-header">
+                        <span>2</span>
+                        <div>
+                            <h2>Ödeme Bilgileri</h2>
+                            <p>Test ödeme bilgilerini girerek siparişi tamamlayın.</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-card-preview">
+                        <div>
+                            <span>Dotnet Store</span>
+                            <strong>Güvenli Ödeme</strong>
+                        </div>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                    <div class="checkout-form-grid">
+                        <div class="form-field">
+                            <label asp-for="CartName">Kart Üzerindeki İsim</label>
+                            <input asp-for="CartName" autocomplete="cc-name" />
+                            <span asp-validation-for="CartName"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="CartNumber">Kart Numarası</label>
+                            <input asp-for="CartNumber" autocomplete="cc-number" />
+                            <span asp-validation-for="CartNumber"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="CartExpirationMonth">Ay</label>
+                            <input asp-for="CartExpirationMonth" autocomplete="cc-exp-month" />
+                            <span asp-validation-for="CartExpirationMonth"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="CartExpirationYear">Yıl</label>
+                            <input asp-for="CartExpirationYear" autocomplete="cc-exp-year" />
+                            <span asp-validation-for="CartExpirationYear"></span>
+                        </div>
+                        <div class="form-field">
+                            <label asp-for="CartCVV">CVV</label>
+                            <input asp-for="CartCVV" autocomplete="cc-csc" />
+                            <span asp-validation-for="CartCVV"></span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="checkout-summary">
+                <h2>Sipariş Özeti</h2>
+
+                <div class="checkout-items">
+                    @foreach (var item in cart.CartItems)
+                    {
+                        var lineTotal = item.Urun.Fiyat * item.Miktar;
+                        <div class="checkout-item">
+                            <img src="~/img/@item.Urun.Resim" alt="@item.Urun.UrunAdi">
                             <div>
-                                <h1 class="h5 mb-1">Teslimat Bilgileri</h1>
-                                <div class="text-muted small">Siparişiniz için adres ve iletişim bilgilerinizi girin.
-                                </div>
+                                <strong>@item.Urun.UrunAdi</strong>
+                                <span>x @item.Miktar</span>
                             </div>
-                            <span class="badge text-bg-primary">1/2</span>
+                            <span>@lineTotal.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</span>
                         </div>
-                    </div>
-
-                    <div class="card-body p-4">
-                        <form asp-controller="Order" asp-action="Checkout" method="post">
-                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label asp-for="AdSoyad" class="form-label fw-semibold"></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light">
-                                            <i class="fa-solid fa-user text-primary"></i>
-                                        </span>
-                                        <input asp-for="AdSoyad" class="form-control"
-                                               placeholder="Adınız ve soyadınız" />
-                                    </div>
-                                    <span asp-validation-for="AdSoyad" class="text-danger small"></span>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label asp-for="Sehir" class="form-label fw-semibold"></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light">
-                                            <i class="fa-solid fa-location-dot text-primary"></i>
-                                        </span>
-                                        <input asp-for="Sehir" class="form-control" placeholder="Şehir" />
-                                    </div>
-                                    <span asp-validation-for="Sehir" class="text-danger small"></span>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label asp-for="Telefon" class="form-label fw-semibold"></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light">
-                                            <i class="fa-solid fa-phone text-primary"></i>
-                                        </span>
-                                        <input asp-for="Telefon" class="form-control" placeholder="05xx xxx xx xx" />
-                                    </div>
-                                    <span asp-validation-for="Telefon" class="text-danger small"></span>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label asp-for="PostaKodu" class="form-label fw-semibold"></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light">
-                                            <i class="fa-solid fa-envelope text-primary"></i>
-                                        </span>
-                                        <input asp-for="PostaKodu" class="form-control" placeholder="Posta kodu" />
-                                    </div>
-                                    <span asp-validation-for="PostaKodu" class="text-danger small"></span>
-                                </div>
-
-                                <div class="col-12">
-                                    <label asp-for="AdresSatiri" class="form-label fw-semibold"></label>
-                                    <textarea asp-for="AdresSatiri" class="form-control" rows="4"
-                                              placeholder="Mahalle, cadde, sokak, bina ve daire bilgisi"></textarea>
-                                    <span asp-validation-for="AdresSatiri" class="text-danger small"></span>
-                                </div>
-
-                                <div class="col-12">
-                                    <label asp-for="SiparisNotu" class="form-label fw-semibold"></label>
-                                    <textarea asp-for="SiparisNotu" class="form-control" rows="3"
-                                              placeholder="Teslimat için eklemek istediğiniz not"></textarea>
-                                    <span asp-validation-for="SiparisNotu" class="text-danger small"></span>
-                                </div>
-                            </div>
-
-                            <div
-                                class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-4 pt-3 border-top">
-                                <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">
-                                    <i class="fa-solid fa-arrow-left me-2"></i>Sepete Dön
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    Siparişi Onayla<i class="fa-solid fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    }
                 </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="card shadow-sm border-0 sticky-top" style="top: 1rem;">
-                    <div class="card-header bg-white py-3">
-                        <h2 class="h5 mb-0">Sipariş Özeti</h2>
-                    </div>
-
-                    <div class="card-body p-4">
-                        @if (ViewBag.Cart?.CartItems != null)
-                        {
-                            <div class="list-group list-group-flush border-bottom mb-3">
-                                @foreach (var item in ViewBag.Cart.CartItems)
-                                {
-                                    <div class="list-group-item px-0 d-flex justify-content-between gap-3">
-                                        <div>
-                                            <div class="fw-semibold">@item.Urun.UrunAdi</div>
-                                            <div class="small text-muted">@item.Miktar adet</div>
-                                        </div>
-                                        <span class="fw-semibold text-nowrap">@(item.Urun.Fiyat* item.Miktar) ₺</span>
-                                    </div>
-                                }
-                            </div>
-
-                            <div class="d-flex justify-content-between py-2">
-                                <span class="text-muted">Ara Toplam</span>
-                                <span class="fw-semibold">@ViewBag.Cart.AraToplam() ₺</span>
-                            </div>
-                            <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Kargo</span>
-                                <span class="text-success fw-semibold">Ücretsiz</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center py-3">
-                                <span class="fw-bold">Toplam</span>
-                                <span class="fs-5 fw-bold text-primary">@ViewBag.Cart.Toplam() ₺</span>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="alert alert-light border mb-0">
-                                Sepetinizde ürün bulunmuyor.
-                            </div>
-                        }
-
-                        <div class="alert alert-light border small mb-0 mt-3">
-                            <i class="fa-solid fa-circle-info text-primary me-2"></i>
-                            Eksik veya hatalı bilgi teslimat sürecini geciktirebilir.
-                        </div>
-                    </div>
+                <div class="summary-row">
+                    <span>Ara Toplam</span>
+                    <strong>@subtotal.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
                 </div>
-            </div>
-        </div>
+                <div class="summary-row">
+                    <span>Kargo</span>
+                    <strong class="success-text">Ücretsiz</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Vergi (%20)</span>
+                    <strong>@tax.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                </div>
+                <div class="summary-total">
+                    <span>Toplam</span>
+                    <strong>@total.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</strong>
+                </div>
+
+                <button type="submit" asp-controller="Order" asp-action="Checkout" class="checkout-btn">
+                    Siparişi Tamamla <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <a asp-controller="Cart" asp-action="Index" class="continue-btn">Sepete Geri Dön</a>
+
+                <div class="summary-note">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Ödeme bilgileriniz güvenli şekilde işlenir.</span>
+                </div>
+            </aside>
+        </form>
     </div>
 </section>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

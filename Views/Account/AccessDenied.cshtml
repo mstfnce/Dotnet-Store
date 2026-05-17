@@ -1,46 +1,29 @@
-@section Bar {
-    <section class="bg-primary p-3">
-        <div class="container">
-            <nav>
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item">
-                        <a href="#">Anasayfa</a>
-                    </li>
-                    
-                    <li class="breadcrumb-item">
-                        Yetkisiz Erisim
-                    </li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+@{
+    ViewData["Title"] = "Yetkisiz Erişim";
 }
 
-<section class=" mt-3">
+@section Bar {
+    @await Component.InvokeAsync("Navbar")
+}
+
+<section class="completed-section">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body text-center p-5">
-                        <div class="display-4 text-danger mb-3">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <h3 class="card-title mb-3">Yetkisiz Erisim</h3>
-                        <p class="text-muted mb-4">
-                            Bu sayfayi goruntulemek icin gerekli yetkiye sahip degilsiniz.
-                        </p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-                                <i class="fa-solid fa-house me-1"></i>
-                                Anasayfa
-                            </a>
-                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary">
-                                <i class="fa-solid fa-right-to-bracket me-1"></i>
-                                Giris Yap
-                            </a>
-                        </div>
-                    </div>
-                </div>
+        <div class="completed-card">
+            <div class="completed-icon danger">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+
+            <span class="completed-kicker">YETKİSİZ ERİŞİM</span>
+            <h1>Yetkisiz Erişim</h1>
+            <p>Bu sayfayı görüntülemek için gerekli yetkiye sahip değilsiniz.</p>
+
+            <div class="completed-actions">
+                <a asp-controller="Home" asp-action="Index" class="checkout-btn">
+                    Anasayfa <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="continue-btn">
+                    Giriş Yap
+                </a>
             </div>
         </div>
     </div>

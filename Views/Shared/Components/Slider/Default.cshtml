@@ -1,6 +1,18 @@
 @model List<Slider>
+@{
+    var slideTitles = new[] {
+        "Akıllı telefonlarda süper fırsatlar",
+        "Yeni teknoloji ürünlerini keşfet",
+        "Seçili ürünlerde avantajlı fiyatlar"
+    };
+    var slideDescriptions = new[] {
+        "Telefon, aksesuar ve elektronik ürünlerde öne çıkan kampanyaları inceleyin.",
+        "Günlük kullanım için güçlü, şık ve uygun fiyatlı ürünler Dotnet Store'da.",
+        "Sınırlı süreli indirimlerle favori ürünlerinizi daha iyi fiyata alın."
+    };
+}
 
-<div id="slider" class="carousel slide" data-bs-ride="carousel">
+<div id="slider" class="store-slider carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
 
         @{
@@ -17,8 +29,23 @@
             int y = 0;
             foreach (var item in Model)
             {
+                var title = string.IsNullOrWhiteSpace(item.Baslik) || item.Baslik.StartsWith("Slider ")
+                    ? slideTitles[y % slideTitles.Length]
+                    : item.Baslik;
+                var description = string.IsNullOrWhiteSpace(item.Aciklama) || item.Aciklama.StartsWith("Slider ")
+                    ? slideDescriptions[y % slideDescriptions.Length]
+                    : item.Aciklama;
+
                 <div class="carousel-item @(y == 0 ? "active" : "")">
-                    <img src="/img/@item.Resim" alt="@item.Baslik" class="d-block w-100">
+                    <img src="/img/@item.Resim" alt="@title" class="store-slider-image">
+                    <div class="store-slider-content">
+                        <span>DOTNET STORE</span>
+                        <h2>@title</h2>
+                        <p>@description</p>
+                        <a asp-controller="Urun" asp-action="List" class="hero-btn">
+                            Ürünleri İncele <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
                 y += 1;
             }
