@@ -10,7 +10,7 @@
         <span class="discount-badge">@discount</span>
     }
     <a asp-controller="Urun" asp-action="Details" asp-route-id="@Model.Id" class="product-image">
-        <img src="~/img/@Model.Resim" alt="@Model.UrunAdi">
+        <img src="~/img/@Model.Resim" alt="@Model.UrunAdi" loading="lazy">
     </a>
     <div class="product-info">
         <a asp-controller="Urun" asp-action="Details" asp-route-id="@Model.Id" class="product-title">@Model.UrunAdi</a>

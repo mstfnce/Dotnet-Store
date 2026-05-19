@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<IEmailService, SmtpEmailService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<ImageService>();
 builder.Services.AddHttpContextAccessor();
 
 // Uygulama oluşturucu (builder) ve servis kaydı

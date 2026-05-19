@@ -1,4 +1,5 @@
 using dotnet_store.Models;
+using dotnet_store.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,12 @@ public class SliderController : Controller
 {
 
     private readonly DataContext _context;
-    public SliderController(DataContext context)
+    private readonly ImageService _imageService;
+
+    public SliderController(DataContext context, ImageService imageService)
     {
         _context = context;
+        _imageService = imageService;
     }
     public ActionResult Index()
     {
@@ -41,13 +45,7 @@ public class SliderController : Controller
 
         if (ModelState.IsValid)
         {
-            var fileName = Path.GetRandomFileName() + ".jpg";
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
-
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await model.Resim!.CopyToAsync(stream);
-            }
+            var fileName = await _imageService.SaveAsync(model.Resim!, 1920, 700);
 
             var entity = new Slider
             {
@@ -107,15 +105,8 @@ public class SliderController : Controller
 
             if (model.Resim != null)
             {
-                var fileName = Path.GetRandomFileName() + ".jpg";
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await model.Resim.CopyToAsync(stream);
-                }
-
-                entity.Resim = fileName;
+                _imageService.Delete(entity.Resim);
+                entity.Resim = await _imageService.SaveAsync(model.Resim, 1920, 700);
             }
 
             entity.Baslik = model.Baslik;

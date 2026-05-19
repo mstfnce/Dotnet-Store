@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using dotnet_store.Models;
+using dotnet_store.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,9 +12,12 @@ namespace dotnet_store.Controllers;
 public class UrunController : Controller
 {
     private readonly DataContext _context;
-    public UrunController(DataContext context)
+    private readonly ImageService _imageService;
+
+    public UrunController(DataContext context, ImageService imageService)
     {
         _context = context;
+        _imageService = imageService;
     }
 
 
@@ -112,14 +116,7 @@ public class UrunController : Controller
 
         if (ModelState.IsValid)
         {
-            var fileName = Path.GetRandomFileName() + ".jpg";  //dosya adi
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName); //resmin kaydedilme yeri
-
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await model.Resim!.CopyToAsync(stream);
-            }
-
+            var fileName = await _imageService.SaveAsync(model.Resim!, 800, 800);
 
             var entity = new Urun
             {
@@ -174,15 +171,8 @@ public class UrunController : Controller
 
                 if (model.Resim != null)
                 {
-                    var fileName = Path.GetRandomFileName() + ".jpg";
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", fileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await model.Resim!.CopyToAsync(stream);
-                    }
-
-                    entity.Resim = fileName;
+                    _imageService.Delete(entity.Resim);
+                    entity.Resim = await _imageService.SaveAsync(model.Resim, 800, 800);
                 }
                 entity.Id = model.Id;
                 entity.UrunAdi = model.UrunAdi;

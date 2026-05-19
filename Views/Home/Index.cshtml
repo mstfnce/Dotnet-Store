@@ -25,7 +25,7 @@
             {
                 var category = categories[i];
                 <a href="/urunler/@category.Url" class="category-tile">
-                    <img src="~/img/@categoryImages[i % categoryImages.Length]" alt="@category.KategoriAdi">
+                    <img src="~/img/@categoryImages[i % categoryImages.Length]" alt="@category.KategoriAdi" loading="lazy">
                     <span>
                         <strong>@category.KategoriAdi</strong>
                         <small>İncele <i class="fa-solid fa-chevron-right"></i></small>
