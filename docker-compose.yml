@@ -1,0 +1,33 @@
+services:
+  # Veritabanı servisi - hazır SQL Server image'ını kullanır (kendi Dockerfile'ımız yok)
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"                     # SQL Server'ın lisans sözleşmesini kabul et
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"  # yönetici parolası (sadece yerel geliştirme için!)
+    ports:
+      - "1433:1433"   # host:container - kendi bilgisayarından da (SSMS vb.) bağlanabilesin diye
+    volumes:
+      - db-data:/var/opt/mssql   # veri, container silinse bile bu volume'de kalıcı durur
+    healthcheck:
+      # "veritabanı gerçekten hazır mı" diye periyodik kontrol
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Uygulama servisi - kendi Dockerfile'ımızdan inşa edilir
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy   # db healthcheck'i geçmeden app başlamasın
+    environment:
+      # Server=db -> "db" burada compose'un tanımladığı servis adı, otomatik iç ağ üzerinden çözümlenir
+      ConnectionStrings__DefaultConnection: "Server=db;Database=DotnetStoreDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+    ports:
+      - "8080:8080"   # host:container - tarayıcıdan localhost:8080 ile erişim
+
+# db servisinin kullandığı kalıcı disk alanı
+volumes:
+  db-data:
