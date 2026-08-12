@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 appsettings.Development.json
 
 build-check/
+
+# Claude Code oturum hafızası (proje kodunun parçası değil)
+memory/
