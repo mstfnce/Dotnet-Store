@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace dotnet_store.Models;
 
+// Uygulama ilk ayağa kalktığında (Program.cs -> SeedDatabase.Initialize) çalışır.
+// Veritabanında hiç rol/kullanıcı yoksa "Admin" rolünü ve bir admin + bir müşteri kullanıcısı oluşturur.
+// Ürün/kategori/slider seed verisi ise burada değil, DataContext.OnModelCreating içindeki HasData'da.
 public static class SeedDatabase
 {
     public static async void Initialize(IApplicationBuilder app)

@@ -41,7 +41,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     //         "abcdefghijklmnopqrstuvwxyz0123456789";
     options.User.RequireUniqueEmail = true;
 
-    options.Lockout.MaxFailedAccessAttempts = 50;
+    options.Lockout.MaxFailedAccessAttempts = 50; //normally 5
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
 
 });

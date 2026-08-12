@@ -1,5 +1,6 @@
 namespace dotnet_store.Models;
 
+// Anasayfadaki slider (banner) kayıtları. Diğer modellerle ilişkisi yoktur, bağımsızdır.
 public class Slider
 {
     public int Id { get; set; }

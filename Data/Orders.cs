@@ -1,5 +1,8 @@
 namespace dotnet_store.Models;
 
+// Tamamlanmış sipariş. Cart'a çok benzer ama kalıcıdır: checkout sırasında
+// sepetteki ürünler ve o anki fiyatlarıyla birlikte buraya "donuk" olarak kopyalanır
+// (Urun.Fiyat sonradan değişse bile OrderItem.Fiyat sipariş anındaki fiyatı korur).
 public class Order
 {
     public int Id { get; set; }
@@ -26,6 +29,8 @@ public class Order
     }
 }
 
+// Siparişteki tek bir satır: hangi ürün, kaç adet, hangi fiyattan alındı.
+// Order (1) - OrderItem (N) ilişkisinin "çok" tarafı.
 public class OrderItem
 {
     public int Id { get; set; }

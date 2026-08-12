@@ -24,7 +24,7 @@ public class CartService : ICartService
         _httpContextAccessor = httpContextAccessor;
     }
 
-
+    // Secili urunu mevcut musterinin sepetine ekler.
     public async Task AddToCart(int urunId, int miktar = 1)
     {
         var cart = await GetCart(GetCustomerId());
@@ -38,6 +38,7 @@ public class CartService : ICartService
         }
     }
 
+    // Verilen musteri kimligine ait sepeti urunleriyle birlikte getirir; yoksa yeni sepet olusturur.
     public async Task<Cart> GetCart(string custId)
     {
         var cart = await _context.Carts
@@ -73,6 +74,7 @@ public class CartService : ICartService
         return cart;
     }
 
+    // Oturum acmis kullanicinin adini, yoksa tarayicidaki customerId cookie degerini dondurur.
     public string GetCustomerId()
     {
         var context = _httpContextAccessor.HttpContext;
@@ -80,6 +82,7 @@ public class CartService : ICartService
         return context?.User.Identity?.Name ?? context?.Request.Cookies["customerId"]!;
     }
 
+    // Secili urunu mevcut musterinin sepetinden belirtilen miktarda siler.
     public async Task RemoveItem(int urunId, int miktar = 1)
     {
         var cart = await GetCart(GetCustomerId());
@@ -93,6 +96,7 @@ public class CartService : ICartService
         }
     }
 
+    // Cookie ile tutulan misafir sepetini kullanici hesabinin sepetine aktarir.
     public async Task TransferCartToUser(string username)
     {
         var userCart = await GetCart(username);

@@ -1,4 +1,6 @@
 namespace dotnet_store.Models;
+
+// Mağazadaki ürünler. KategoriId foreign key ile bir Kategori'ye bağlıdır (N:1).
 public class Urun
 {
     public int Id { get; set; }

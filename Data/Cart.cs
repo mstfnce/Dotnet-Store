@@ -2,6 +2,9 @@ using System.Xml.Serialization;
 
 namespace dotnet_store.Models;
 
+// Alışveriş sepeti. Kullanıcı giriş yapmışsa CustomerId = kullanıcı adı,
+// yapmamışsa tarayıcıya yazılan "customerId" cookie değeridir (bkz. CartService).
+// Sepetle ilgili ekleme/silme/toplam hesaplama mantığı burada, controller'da değil.
 public class Cart
 {
     public int CartId { get; set; }
@@ -54,6 +57,8 @@ public class Cart
     }
 }
 
+// Sepetteki tek bir satır: hangi üründen kaç adet.
+// Cart (1) - CartItem (N) ilişkisinin "çok" tarafı.
 public class CartItem
 {
     public int CartItemId { get; set; }
