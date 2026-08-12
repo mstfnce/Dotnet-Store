@@ -80,3 +80,21 @@ Sonra `docker compose up -d app` ile uygulamayı yeniden başlattık.
 
 - Uygulama: http://localhost:8080
 - Veritabanı (SSMS / Azure Data Studio ile): `localhost,1433`, kullanıcı `sa`, parola `YourStrong!Passw0rd` (sadece yerel geliştirme — production'da asla böyle bırakılmaz).
+
+## 7. Günlük Kullanım (PC'yi kapatıp tekrar açtıktan sonra)
+
+Bilgisayar kapanınca Docker Desktop da kapanır, container'lar durur. Veritabanı verisi kaybolmaz (`db-data` volume'ünde kalıcı durur) — sadece servisleri tekrar başlatman yeterli:
+
+1. **Docker Desktop'ı aç**, balina ikonu sabitlensin.
+2. Proje klasöründe:
+   ```bash
+   docker compose up -d
+   ```
+   Kod değiştirmediysen `--build` eklemene gerek yok, var olan image kullanılır ve daha hızlı açılır. Kod değiştiyse `docker compose up -d --build` kullan.
+3. Kontrol et:
+   ```bash
+   docker ps
+   ```
+   `app` ve `db` "Up" görünüyorsa `http://localhost:8080` adresinden siteye eriş.
+
+Migration'ı tekrar çalıştırmana gerek yok — sadece `docker compose down -v` ile volume'ü silersen (veritabanını sıfırlarsan) tekrar gerekir.
