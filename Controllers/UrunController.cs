@@ -198,7 +198,7 @@ public class UrunController : Controller
     {
         if (id != null)
         {
-            RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         var entity = _context.Urunler.FirstOrDefault(i => i.Id == id);
