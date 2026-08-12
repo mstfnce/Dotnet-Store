@@ -26,6 +26,7 @@ The UI has been refreshed and translated to Turkish for the end-user experience.
 - ASP.NET Core Identity
 - Bootstrap
 - Iyzipay
+- Docker & Docker Compose
 
 ## Project Structure
 
@@ -68,6 +69,22 @@ dotnet run
 ```
 
 The application will be available at the localhost URL shown in the terminal.
+
+## Running with Docker
+
+The project also ships with a multi-stage `Dockerfile` and a `docker-compose.yml` that runs the app together with a SQL Server container.
+
+```bash
+docker compose up --build
+```
+
+On first run, apply the migrations against the containerized database (from the host machine):
+
+```bash
+dotnet ef database update --connection "Server=localhost,1433;Database=DotnetStoreDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+```
+
+The app will then be available at `http://localhost:8080`. See [`DOCKER-REHBER.md`](DOCKER-REHBER.md) (Turkish) for a more detailed walkthrough and troubleshooting notes.
 
 ## Database
 
