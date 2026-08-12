@@ -2474,3 +2474,179 @@ html.dark-theme .social-row a {
 .theme-toggle i {
   color: var(--primary);
 }
+
+/* ─── Homepage UI improvements ───────────────────────────────── */
+
+/* Section heading left accent */
+.section-heading h2 {
+  border-left: 4px solid var(--primary);
+  padding-left: 12px;
+}
+
+/* Stats bar */
+.stats-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stat-item {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  padding: 6px 22px;
+}
+
+.stat-item + .stat-item {
+  border-left: 1px solid var(--line);
+}
+
+.stat-item i {
+  color: var(--primary);
+  flex: 0 0 auto;
+  font-size: 22px;
+}
+
+.stat-item strong {
+  color: var(--ink);
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.stat-item span {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+}
+
+/* Hover transitions for product cards */
+.product-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 16px 32px rgba(31, 31, 48, 0.14);
+  transform: translateY(-6px);
+}
+
+.featured-grid,
+.catalog-grid,
+.related-grid {
+  padding-bottom: 8px;
+}
+
+/* Hover transitions for category tiles */
+.category-tile {
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.category-tile:hover {
+  border-color: var(--primary);
+  box-shadow: 0 10px 24px rgba(102, 16, 242, 0.14);
+  transform: translateY(-4px);
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-1 { transition-delay: 0.08s; }
+.reveal-2 { transition-delay: 0.16s; }
+.reveal-3 { transition-delay: 0.24s; }
+.reveal-4 { transition-delay: 0.32s; }
+.reveal-5 { transition-delay: 0.40s; }
+
+/* Scroll-to-top button */
+.scroll-top {
+  align-items: center;
+  background: var(--primary);
+  border: 0;
+  border-radius: 50%;
+  bottom: 28px;
+  box-shadow: 0 4px 18px rgba(102, 16, 242, 0.34);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-size: 18px;
+  height: 48px;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  right: 28px;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+  width: 48px;
+  z-index: 1050;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px);
+}
+
+/* Slider content entrance animation */
+@keyframes sliderFadeIn {
+  from { opacity: 0; transform: translateY(-50%) translateX(-28px); }
+  to   { opacity: 1; transform: translateY(-50%); }
+}
+
+.carousel-item.active .store-slider-content {
+  animation: sliderFadeIn 0.65s ease forwards;
+}
+
+/* Sale code subtle pulse */
+@keyframes codePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.sale-code {
+  animation: codePulse 2.8s ease infinite;
+}
+
+/* Stats bar responsive */
+@media (max-width: 767.98px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-item {
+    padding: 8px 14px;
+  }
+
+  .stat-item:nth-child(3) {
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .stat-item:nth-child(4) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* Dark theme: stats bar */
+html.dark-theme .stats-bar {
+  background: var(--surface);
+  border-color: var(--line);
+}

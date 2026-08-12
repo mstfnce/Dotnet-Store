@@ -1,3 +1,26 @@
+// Scroll reveal via IntersectionObserver
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) {
+        target.classList.add('visible');
+        revealObserver.unobserve(target);
+      }
+    });
+  },
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Scroll-to-top button
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+if (scrollTopBtn) {
+  window.addEventListener('scroll', () => {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 420);
+  }, { passive: true });
+  scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
 (() => {
   const storageKey = "dotnet-store-theme";
   const root = document.documentElement;
@@ -15,7 +38,7 @@
         icon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
       }
       if (label) {
-        label.textContent = isDark ? "Açık" : "Tema";
+        label.textContent = isDark ? "Aydınlık" : "Karanlık";
       }
     }
   };

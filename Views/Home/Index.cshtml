@@ -18,13 +18,48 @@
     </div>
 </section>
 
+<div class="stats-bar reveal">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <i class="fa-solid fa-box-open"></i>
+                <div>
+                    <strong>10.000+</strong>
+                    <span>Farklı Ürün</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fa-solid fa-users"></i>
+                <div>
+                    <strong>50.000+</strong>
+                    <span>Mutlu Müşteri</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fa-solid fa-truck-fast"></i>
+                <div>
+                    <strong>Ücretsiz Kargo</strong>
+                    <span>250₺ ve üzeri siparişlerde</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <i class="fa-solid fa-headset"></i>
+                <div>
+                    <strong>7/24 Destek</strong>
+                    <span>Her zaman yanınızdayız</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="category-strip-section">
     <div class="container">
         <div class="category-strip">
             @for (var i = 0; i < Math.Min(categories.Count, 5); i++)
             {
                 var category = categories[i];
-                <a href="/urunler/@category.Url" class="category-tile">
+                <a href="/urunler/@category.Url" class="category-tile reveal reveal-@(i + 1)">
                     <img src="~/img/@categoryImages[i % categoryImages.Length]" alt="@category.KategoriAdi" loading="lazy">
                     <span>
                         <strong>@category.KategoriAdi</strong>
@@ -36,7 +71,7 @@
     </div>
 </section>
 
-<section class="featured-section">
+<section class="featured-section reveal">
     <div class="container">
         <div class="section-heading">
             <h2>Öne Çıkan Ürünler</h2>
@@ -53,7 +88,7 @@
     </div>
 </section>
 
-<section class="sale-banner-section">
+<section class="sale-banner-section reveal">
     <div class="container">
         <div class="sale-banner">
             <div class="sale-icon"><i class="fa-solid fa-tag"></i></div>
