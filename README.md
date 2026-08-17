@@ -41,6 +41,12 @@ Views/            Razor views
 wwwroot/          CSS, JavaScript, images, and static assets
 ```
 
+## Prerequisites
+
+- [.NET 9 SDK](https://dotnet.microsoft.com/download)
+- Microsoft SQL Server (local, remote, or via Docker)
+- `dotnet-ef` tool for running migrations: `dotnet tool install --global dotnet-ef`
+
 ## Getting Started
 
 Clone the repository:
