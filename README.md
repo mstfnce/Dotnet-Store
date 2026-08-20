@@ -41,6 +41,21 @@ Views/            Razor views
 wwwroot/          CSS, JavaScript, images, and static assets
 ```
 
+## Documentation
+
+Detailed technical documentation (Turkish) lives in [`docs/`](docs/README.md):
+
+| Doc | Topic |
+|---|---|
+| [01 — Mimari](docs/01-mimari.md) | Layers, request pipeline, DI, routing |
+| [02 — Veri Modeli](docs/02-veri-modeli.md) | Entities, relations, migrations, seed data |
+| [03 — Controller ve Rotalar](docs/03-controller-ve-rotalar.md) | Full endpoint and authorization reference |
+| [04 — Servisler](docs/04-servisler.md) | Cart, image and email services, view components |
+| [05 — Kimlik Doğrulama](docs/05-kimlik-dogrulama.md) | Identity configuration, roles, account flows |
+| [06 — Sipariş ve Ödeme](docs/06-siparis-ve-odeme.md) | Cart to checkout to payment, end to end |
+| [07 — Kurulum ve Çalıştırma](docs/07-kurulum-ve-calistirma.md) | Setup, configuration, Docker, tests |
+| [08 — Geliştirme Notları](docs/08-gelistirme-notlari.md) | Known gaps and technical debt |
+
 ## Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
